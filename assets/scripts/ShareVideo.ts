@@ -1,3 +1,4 @@
+import { btMgr } from "./byteDanceManager";
 
 const {ccclass, property} = cc._decorator;
 
@@ -7,13 +8,21 @@ export default class ShareVideo extends cc.Component {
     
     @property(cc.Node)
     private parentNode: cc.Node = null;
-    // LIFE-CYCLE CALLBACKS:
+
+    @property(cc.Node)
+    private shareBtn: cc.Node = null;
+
 
     // onLoad () {}
+    private _recordVideo: string = null
 
     private cameraNode;
     private video;
     private videoTexture: cc.Texture2D;
+
+    onLoad() {
+        this.shareBtn.on(cc.Node.EventType.TOUCH_END, this.onShareBtn, this);
+    }
 
     start () {
 
@@ -21,6 +30,7 @@ export default class ShareVideo extends cc.Component {
 
     initVideo(video: string){
         this.showcamera(video);
+        this._recordVideo = video;
     }
 
     private showcamera(video: string) {
@@ -72,5 +82,15 @@ export default class ShareVideo extends cc.Component {
                 flipY: false
             });
         }
+    }
+
+    onShareBtn(){
+        btMgr.shareRecordVideo("", this._recordVideo, 
+        ()=>{
+
+        }, 
+        ()=>{
+
+        })
     }
 }
